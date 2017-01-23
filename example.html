@@ -19,6 +19,7 @@
 		.zoomRange([0, 9])
 		.zoom(4)
 		.add(po.image().url("http://s3.amazonaws.com/com.modestmaps.bluemarble/{Z}-r{Y}-c{X}.jpg"))
-		.add(po.interact()).add(po.compass().pan("none"));
+    .add(po.interact()).add(po.compass().pan("small").position("bottom-right"));
+    
 </script>
 </html>

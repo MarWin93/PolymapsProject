@@ -4,7 +4,7 @@ var div = document.getElementById("map");
 
 var map = po.map()
 	.container(div.appendChild(po.svg("svg")))
-	.center({lat: 53.289, lon: -340.939})
+	.center({ lat: 53.289, lon: -340.939 })
 	.zoom(7)
 	.add(po.interact())
 	.add(po.hash());
@@ -36,10 +36,50 @@ function callback(data) {
 		}
 	}
 
-	document.getElementById("logo").src = data.brandLogoUri;
-
 	map.add(po.compass()
 		.pan("none"));
+
+	map.add(po.geoJson()
+		.features([{ geometry: { coordinates: [[53.289, -340.939], [70.289, -340.939]], type: "LineString" } }]));
+}
+
+
+function CallRestService(request, callback) {
+	$.ajax({
+		url: request,
+		dataType: "jsonp",
+		jsonp: "jsonp",
+		success: function (r) {
+			callback(r);
+		},
+		error: function (e) {
+			alert(e.statusText);
+		}
+	});
+}
+
+var request = "http://dev.virtualearth.net"
+	+ "/REST/v1/Routes?"
+	+ "waypoint.1=Gdansk&waypoint.2=Warszawa"
+	+ "&key=Ala0zezv7xYEJpWjwN7mhAwt9Lp5j07z0j9e7yo0X6c7qei0fXEcUCuMFxIjlaEv";
+
+CallRestService(request, drawPoints);
+
+function drawPoints(data) {
+	const points = data.resourceSets[0].resources[0].routeLegs[0].itineraryItems.map(item => item.maneuverPoint.coordinates);
+	var line = {
+		type: "Feature",
+		geometry: {
+			type: "LineString",
+			coordinates: points
+		}
+	};
+
+	// map.add(po.geoJson()
+	// 	.features([line])
+	// 	.on("load", function(e){
+	// 		console.log(e);
+	// 	}));
 }
 
 /** Returns a Bing URL template given a string and a list of subdomains. */
@@ -65,43 +105,6 @@ function template(url, subdomains) {
 	};
 }
 
-function CallRestService(request, callback) {
-	$.ajax({
-		url: request,
-		dataType: "jsonp",
-		jsonp: "jsonp",
-		success: function (r) {
-			callback(r);
-		},
-		error: function (e) {
-			alert(e.statusText);
-		}
-	});
-}
-
-var request = "http://dev.virtualearth.net"
-	+ "/REST/v1/Routes?"
-	+ "waypoint.1=Gdansk&waypoint.2=Warszawa"
-	+ "&key=Ala0zezv7xYEJpWjwN7mhAwt9Lp5j07z0j9e7yo0X6c7qei0fXEcUCuMFxIjlaEv";
-
-CallRestService(request, drawPoints);
-
-function drawPoints(data) {
-	const points = data.resourceSets[0].resources[0].routeLegs[0].itineraryItems.map(item => item.maneuverPoint.coordinates);
-	var layer = po.geoJson();
-	var line = {
-		type: "Feature",
-		geometry: {
-			type: "LineString",
-			coordinates: points
-		}, properties: { "stroke": "red", "stroke-width": 5, "fill-opacity": 1 }
-	};
-
-	layer.features([line]);
-	layer.on("load", po.stylist()
-	.attr("stroke", function(d) { return "green" }));
-	map.add(layer);
-}
 
 // map.add(po.geoJson()
 //     .url("streets.json")
