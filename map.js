@@ -2,6 +2,9 @@ var po = org.polymaps;
 
 var div = document.getElementById("map");
 
+var source = prompt("Please specify starting location:");
+var destination = prompt("Please specify destination:");
+
 var map = po.map()
 	.container(div.appendChild(po.svg("svg")))
 	.center({ lat: 53.289, lon: -340.939 })
@@ -41,7 +44,6 @@ function callback(data) {
 
 }
 
-
 function CallRestService(request, callback) {
 	$.ajax({
 		url: request,
@@ -58,7 +60,7 @@ function CallRestService(request, callback) {
 
 var request = "http://dev.virtualearth.net"
 	+ "/REST/v1/Routes/walking?"
-	+ "waypoint.1=Gdynia&waypoint.2=Rumia"
+	+ "waypoint.1=" + source + "&waypoint.2=" + destination
 	+ "&key=Ala0zezv7xYEJpWjwN7mhAwt9Lp5j07z0j9e7yo0X6c7qei0fXEcUCuMFxIjlaEv";
 
 CallRestService(request, drawPoints);
