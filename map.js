@@ -58,12 +58,21 @@ function CallRestService(request, callback) {
 
 var request = "http://dev.virtualearth.net"
 	+ "/REST/v1/Routes/walking?"
-	+ "waypoint.1=Gdynia&waypoint.2=Rumia"
+	+ "waypoint.1=Gdynia&waypoint.2=Warszawa"
 	+ "&key=Ala0zezv7xYEJpWjwN7mhAwt9Lp5j07z0j9e7yo0X6c7qei0fXEcUCuMFxIjlaEv";
 
 CallRestService(request, drawPoints);
 
 function drawPoints(data) {
+    if(data.errorDetails.length > 0){
+        var stringAlert = "";
+        $.each( data.errorDetails, function( i, l ){
+            stringAlert += "ERROR: " + data.errorDetails[i] + "\n";
+
+        });
+        alert(stringAlert);
+        location.reload();
+    }
 	const points = data.resourceSets[0].resources[0].routeLegs[0].itineraryItems.map(item => item.maneuverPoint.coordinates);
 
 	points.forEach(p => {
