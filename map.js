@@ -57,8 +57,8 @@ function CallRestService(request, callback) {
 }
 
 var request = "http://dev.virtualearth.net"
-	+ "/REST/v1/Routes?"
-	+ "waypoint.1=Gdansk&waypoint.2=Warszawa"
+	+ "/REST/v1/Routes/walking?"
+	+ "waypoint.1=Gdynia&waypoint.2=Rumia"
 	+ "&key=Ala0zezv7xYEJpWjwN7mhAwt9Lp5j07z0j9e7yo0X6c7qei0fXEcUCuMFxIjlaEv";
 
 CallRestService(request, drawPoints);
