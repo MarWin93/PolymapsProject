@@ -66,7 +66,7 @@ var request = "http://dev.virtualearth.net"
 CallRestService(request, drawPoints);
 
 function drawPoints(data) {
-    if(data.errorDetails.length > 0){
+    if(data.errorDetails != undefined && data.errorDetails.length > 0){
         var stringAlert = "";
         $.each( data.errorDetails, function( i, l ){
             stringAlert += "ERROR: " + data.errorDetails[i] + "\n";
