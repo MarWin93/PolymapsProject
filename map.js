@@ -39,8 +39,6 @@ function callback(data) {
 	map.add(po.compass()
 		.pan("none"));
 
-	map.add(po.geoJson()
-		.features([{ geometry: { coordinates: [[53.289, -340.939], [70.289, -340.939]], type: "LineString" } }]));
 }
 
 
@@ -67,19 +65,18 @@ CallRestService(request, drawPoints);
 
 function drawPoints(data) {
 	const points = data.resourceSets[0].resources[0].routeLegs[0].itineraryItems.map(item => item.maneuverPoint.coordinates);
-	var line = {
-		type: "Feature",
-		geometry: {
-			type: "LineString",
-			coordinates: points
-		}
-	};
 
-	// map.add(po.geoJson()
-	// 	.features([line])
-	// 	.on("load", function(e){
-	// 		console.log(e);
-	// 	}));
+	points.forEach(p => {
+		var point = {
+			type: "Feature",
+			geometry: {
+				"type": "Point",
+				"coordinates": [ p[1], p[0] ]
+			}
+		};
+		map.add(po.geoJson()
+			.features([point]));
+	});
 }
 
 /** Returns a Bing URL template given a string and a list of subdomains. */
